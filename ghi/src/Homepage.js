@@ -17,15 +17,13 @@ class HomePage extends Component {
     return (
   
       <div style={myStyle}>
-      <div className="text-center"> 
+      <div className="row"> 
         <h1 className="text-center" style={{color: 'white', textAlign: 'center'}}>Tren</h1>
         <div className="col-lg-6 mx-auto">
-          <p className="lead fw-bold" style={{color: 'white', textAlign: 'center'}}>
+          <p className="lead fw-bold" style={{color: 'white', fontWeight: "bold", textAlign: 'center'}}>
             The beginning of your journey to Ascend.
           </p>
-          <div className="button-center">
-  <button className="btn btn-primary">Start here..</button>
-</div>
+  <button className="text-center"  style={{ backgroundColor: "lightgrey", color: "black", padding: "15px 32px", marginInline: "auto", display: "flex", fontSize: "30px", fontWeight: "bold", borderRadius: "12px" }}>Start here..</button>
         </div>
       </div>
       </div>
