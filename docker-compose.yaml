@@ -1,0 +1,93 @@
+version: "3.7"
+volumes:
+    ghi:
+        external: true
+    tren-data:
+        external: true
+services:
+    ghi:
+        image: node:lts-bullseye
+        command: /bin/bash run.sh
+        working_dir: /app
+        volumes:
+            - ./ghi:/app
+        ports:
+            - "3000:3000"
+        environment:
+            HOST_OS: ${OS}
+            NODE_ENV: development
+            HOST: "0.0.0.0"
+            NUTRITION_APP_API_KEY: ${NUTRITION_APP_API_KEY}
+            WORKOUT_APP_API_KEY: ${WORKOUT_APP_API_KEY}
+            REACT_APP_NUTRITION_HOST: http://localhost:8091
+            REACT_APP_WORKOUTS_HOST: http://localhost:8080
+            REACT_APP_ACCOUNTS_HOST: http://localhost:8090
+            REACT_APP_GYMS_HOST: http://localhost:8081
+    database:
+        build:
+            context: ./relational-data
+            dockerfile: ./Dockerfile.dev
+        volumes:
+            - tren-data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_MULTIPLE_DATABASES=accounts,gyms,nutrition,workouts
+            - POSTGRES_PASSWORD=test-databases
+
+        ports:
+            - 15432:5432
+    workouts:
+        build:
+            context: ./workouts
+            dockerfile: ./Dockerfile.dev
+        ports:
+            - "8080:8000"
+        volumes:
+            - ./workouts/workout_rest:/app
+        depends_on:
+            - database
+        environment:
+            DATABASE_URL: postgresql://workouts:password@database:5432/workouts
+            WAIT_HOSTS: database:5432
+            WORKOUT_APP_API_KEY: ${WORKOUT_APP_API_KEY}
+    gyms:
+        build:
+            context: ./gyms
+            dockerfile: ./Dockerfile.dev
+        ports:
+            - "8081:8000"
+        volumes:
+            - ./gyms/gyms_rest:/app
+        depends_on:
+            - database
+        environment:
+            DATABASE_URL: postgresql://gyms:password@database:5432/gyms
+            WAIT_HOSTS: database:5432
+    accounts:
+        build:
+            context: ./accounts
+            dockerfile: ./Dockerfile.dev
+        ports:
+            - "8090:8000"
+        volumes:
+            - ./accounts/accounts_rest:/app
+        depends_on:
+            - database
+        environment:
+            DATABASE_URL: postgresql://accounts:password@database:5432/accounts
+            WAIT_HOSTS: database:5432
+            #DJWTO_SIGNING_KEY: ${DJWTO_SIGNING_KEY}
+    nutrition:
+        build:
+            context: ./nutrition
+            dockerfile: ./Dockerfile.dev
+        ports:
+            - "8091:8000"
+        volumes:
+            - ./nutrition/nutrition_rest:/app
+        depends_on:
+            - database
+        environment:
+            DATABASE_URL: postgresql://nutrition:password@database:5432/nutrition
+            WAIT_HOSTS: database:5432
+            NUTRITION_APP_API_KEY: ${NUTRITION_APP_API_KEY}
+
