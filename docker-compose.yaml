@@ -42,7 +42,7 @@ services:
         ports:
             - "8080:8000"
         volumes:
-            - ./workouts/workout_rest:/app
+            - ./workouts:/app
         depends_on:
             - database
         environment:
@@ -56,7 +56,7 @@ services:
         ports:
             - "8081:8000"
         volumes:
-            - ./gyms/gyms_rest:/app
+            - ./gyms:/app
         depends_on:
             - database
         environment:
@@ -69,7 +69,7 @@ services:
         ports:
             - "8090:8000"
         volumes:
-            - ./accounts/accounts_rest:/app
+            - ./accounts:/app
         depends_on:
             - database
         environment:
@@ -83,7 +83,7 @@ services:
         ports:
             - "8091:8000"
         volumes:
-            - ./nutrition/nutrition_rest:/app
+            - ./nutrition:/app
         depends_on:
             - database
         environment:
