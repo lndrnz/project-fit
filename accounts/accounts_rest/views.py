@@ -23,6 +23,30 @@ class AccountDetailEncoder(ModelEncoder):
         "censored",
     ]
 
+@require_http_methods(["GET"])
+def api_user_token(request):
+    if "jwt_access_token" in request.COOKIES:
+        token = request.COOKIES["jwt_access_token"]
+        if token:
+            return JsonResponse({"token": token})
+    response = JsonResponse({"token": None})
+    return response
+
+
+@auth.jwt_login_required
+def get_some_data(request):
+    token_data = request.payload
+    response = JsonResponse({"token": token_data["user"]})
+    return response
+
+
+@auth.jwt_login_required
+def check_user(request):
+    if request.user is not None:
+        return JsonResponse({"authenticated": request.user.is_authenticated})
+    else:
+        return JsonResponse({"message": "not found"})
+
 @require_http_methods( ["GET", "POST"])
 def api_list_accounts(request):
     if request.method == "GET":
@@ -110,3 +134,29 @@ def api_show_account(request,pk):
             encoder=AccountDetailEncoder,
             safe=False,
         )
+
+@require_http_methods(["POST"])
+def new_authenticate(request):
+    new_username= request.POST["username"]
+    new_password = request.POST["password"]
+    user = authenticate(request, username=new_username, password=new_password )
+    if user is not None:
+        login(request,user)
+        return JsonResponse(
+            {
+                "message":"User is logged in"
+                }
+                )
+    else:
+        response = JsonResponse(
+            {
+            "message": "The credentials are not unique. Please try a different one."
+            }
+        )
+        response.status_code = 400
+        return response
+
+@require_http_methods(["DELETe"])
+def new_logout(request):
+    logout(request)
+    return JsonResponse({"message": "You have been logged out."})
