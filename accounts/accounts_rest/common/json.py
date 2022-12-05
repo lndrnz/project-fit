@@ -38,6 +38,6 @@ class ModelEncoder(DateEncoder, QuerySetEncoder, JSONEncoder):
             return d
         else:
             return super().default(o)
-
-def get_extra_data(self,o):
-    return {}
+    
+    def get_extra_data(self,o):
+            return {}

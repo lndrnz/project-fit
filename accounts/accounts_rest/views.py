@@ -2,7 +2,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
 from .models import Account
-from common.json import ModelEncoder
+from .common.json import ModelEncoder
 from django.views.decorators.http import require_http_methods
 import djwto.authentication as auth
 import json

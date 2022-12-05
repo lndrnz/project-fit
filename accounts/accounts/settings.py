@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
+import dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,7 +37,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'accounts_rest.apps.AccountsRestConfig',
+    'djwto',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,14 +49,16 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+LOGIN_URL = "login"
+LOGOUT_URL = "logout"
 
 ROOT_URLCONF = 'accounts.urls'
 
@@ -73,17 +80,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'accounts.wsgi.application'
 
+ALLOWED_HOSTS = ["*"]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    os.environ.get("CORS_HOST", "http://localhost:3001")
+]
+CORS_ALLOW_CREDENTIALS = True
+
+DJWTO_MODE = 'TWO-COOKIES'
+DJWTO_CSRF = False
+DJWTO_ACCESS_TOKEN_LIFETIME = timedelta(days=1)
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
+# Your DEBUG value MUST be False in production
+DJWTO_SAME_SITE = "LAX" if DEBUG else "NONE"
+
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
+DATABASES = {}
+DATABASES["default"] = dj_database_url.config()
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

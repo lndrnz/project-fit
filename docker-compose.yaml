@@ -75,7 +75,7 @@ services:
         environment:
             DATABASE_URL: postgresql://accounts:password@database:5432/accounts
             WAIT_HOSTS: database:5432
-            #DJWTO_SIGNING_KEY: ${DJWTO_SIGNING_KEY}
+            DJWTO_SIGNING_KEY: ${DJWTO_SIGNING_KEY}
     nutrition:
         build:
             context: ./nutrition
