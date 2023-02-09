@@ -23,81 +23,80 @@ class AccountDetailEncoder(ModelEncoder):
         "censored",
     ]
 
-@require_http_methods(["GET"])
-def api_user_token(request):
-    if "jwt_access_token" in request.COOKIES:
-        token = request.COOKIES["jwt_access_token"]
-        if token:
-            return JsonResponse({"token": token})
-    response = JsonResponse({"token": None})
-    return response
+# @require_http_methods(["GET"])
+# def api_user_token(request):
+#     if "jwt_access_token" in request.COOKIES:
+#         token = request.COOKIES["jwt_access_token"]
+#         if token:
+#             return JsonResponse({"token": token})
+#     response = JsonResponse({"token": None})
+#     return response
 
 
-@auth.jwt_login_required
-def get_some_data(request):
-    token_data = request.payload
-    response = JsonResponse({"token": token_data["user"]})
-    return response
+# @auth.jwt_login_required
+# def get_some_data(request):
+#     token_data = request.payload
+#     response = JsonResponse({"token": token_data["user"]})
+#     return response
 
 
-@auth.jwt_login_required
-def check_user(request):
-    if request.user is not None:
-        return JsonResponse({"authenticated": request.user.is_authenticated})
-    else:
-        return JsonResponse({"message": "not found"})
+# @auth.jwt_login_required
+# def check_user(request):
+#     if request.user is not None:
+#         return JsonResponse({"authenticated": request.user.is_authenticated})
+#     else:
+#         return JsonResponse({"message": "not found"})
 
 @require_http_methods( ["GET", "POST"])
 def api_list_accounts(request):
     if request.method == "GET":
-        atttendees = Account.objects.all()
+        accounts = Account.objects.all()
         return JsonResponse(
-            {"accounts": atttendees},
+            {"accounts": accounts},
             encoder=AccountListEncoder
         )
     else:
         try:
-            content = json.loads(request.body)
-            new_username = content["username"]
-            new_password = content["password"]
-            new_first_name = content["first_name"]
-            new_last_name = content["last_name"]
-            new_email = content["email"]
-            account = Account.objects.create_user(
+            if request.method == "PUT":
+                content = json.loads(request.body)
+                new_username = content["username"]
+                new_password = content["password"]
+                new_first_name = content["first_name"]
+                new_last_name = content["last_name"]
+                new_email = content["email"]
+                account = Account.objects.create_user(
                 username=new_username,
                 password=new_password,
                 first_name=new_first_name,
                 last_name=new_last_name
-            )
-            account.save()
-            login(request,account)
-            return JsonResponse(
-                account,
-                encoder=AccountDetailEncoder,
-                safe=False,
-            )
+                    )
+                account.save()
+                login(request,account)
+                return JsonResponse(
+                    account,
+                    encoder=AccountDetailEncoder,
+                    safe=False
+                )
         except Exception as response:
-            response = JsonResponse(
-                { "message": "The credentials are not unique. Please try a different one."
-                }
-            )
+            response = JsonResponse( {"message": "The credentials are not unique. Try another one."}
+                                    )
             response.status_code = 405
             return response
 
-def update_censors(request, pk):
-    if request.method == "PUT":
-        account = Account.objects.get(id=pk)
-        content = json.loads(request.body)
-        new_censor = content["censored"]
+# def update_censors(request, pk):
+#     if request.method == "PUT":
+#         account = Account.objects.get(id=pk)
+#         content = json.loads(request.body)
+#         new_censor = content["censored"]
 
-        Account.objects.filter.get(id=pk)
-        return JsonResponse(
-            account,
-            encoder=AccountDetailEncoder,
-            safe=False
-        )
-    else:
-        return JsonResponse({"message": "Your request has failed"})
+#         Account.objects.filter.get(id=pk)
+#         return JsonResponse(
+#             account,
+#             encoder=AccountDetailEncoder,
+#             safe=False
+#         )
+#     else:
+#         return JsonResponse({"message": "Your request has failed"})
 
 @require_http_methods(["DELETE", "PUT", "GET"])
 def api_show_account(request,pk):
@@ -111,21 +110,21 @@ def api_show_account(request,pk):
     elif request.method =="DELETE":
         count, _= Account.objects.filter(id=pk).delete()
         Account.objects.filter(id=pk).delete()
-        return JsonResponse ({"deleted": count > 0})
+        return JsonResponse ({"Account is deleted.": count > 0})
     else:
         content = json.loads(request.body)
         new_username=content["username"]
         new_password = make_password(content["password"])
         new_first_name=content["first_name"]
         new_last_name=content["last_name"]
-        new_email=["email"]
+        new_email=content["email"]
 
         Account.objects.filter(id=pk).update(
             username=new_username,
             password=new_password,
-            email=new_email,
             first_name=new_first_name,
-            last_name=new_first_name
+            last_name=new_last_name,
+            email=new_email,   
         )
 
         account = Account.objects.get(id=pk)
@@ -156,7 +155,7 @@ def new_authenticate(request):
         response.status_code = 400
         return response
 
-@require_http_methods(["DELETe"])
+@require_http_methods(["DELETE"])
 def new_logout(request):
     logout(request)
     return JsonResponse({"message": "You have been logged out."})

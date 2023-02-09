@@ -8,7 +8,6 @@ class Account(AbstractUser):
     last_name = models.CharField(max_length=100, null=True)
     username = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=100)
-    censored = models.BooleanField(default=True, null=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     last_login = models.DateTimeField(auto_now=True)
