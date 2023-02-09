@@ -18,7 +18,8 @@ TrenHard
 I will be creating a fullstack web application that is a platform for people interested in their health that will allow people to signup and create a workout program for themselves or a suggested one, provide a meal program, and show nearest gyms by their location by inputting their address.
 We will be using the Google Maps API, the myfitnesspal API,and exersiseDB API which are all free.
 
-Finished working on Accounts Microservice after a few month hiatus. I was able to complete the views.py and debug the problems while maintaining RESTful practices as well as making sure that JWT authentication was possible. I checked and verified on Insomnia, the only one I did not test however was the delete but maybe I will try it later when it's not so late. 02/09/23 1:31 AM
+Finished working on Accounts Microservice after a few month hiatus. I was able to complete the views.py and debug the problems while maintaining RESTful practices as well as making sure that JWT authentication was possible. I checked and verified on Insomnia, the only one I did not test however was the delete but maybe I will try it later when it's not so late. Just tried it right now DELETE works and I was able to fix a POST bug for creating new accounts as it was spelled PUT instead of POST.
+02/09/23 1:31 AM
 
 ## Goal
 The main goal of this project is for me to learn and challenge myself into making a Full-stack Web application using Django and React on my own this time.
