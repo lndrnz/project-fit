@@ -19,33 +19,33 @@ class AccountDetailEncoder(ModelEncoder):
         "last_name",
         "password",
         "is_active",
-        "data_joined",
-        "censored",
+        "date_joined",
+        "username"
     ]
 
-# @require_http_methods(["GET"])
-# def api_user_token(request):
-#     if "jwt_access_token" in request.COOKIES:
-#         token = request.COOKIES["jwt_access_token"]
-#         if token:
-#             return JsonResponse({"token": token})
-#     response = JsonResponse({"token": None})
-#     return response
+@require_http_methods(["GET"])
+def api_user_token(request):
+    if "jwt_access_token" in request.COOKIES:
+        token = request.COOKIES["jwt_access_token"]
+        if token:
+            return JsonResponse({"token": token})
+    response = JsonResponse({"token": None})
+    return response
 
 
-# @auth.jwt_login_required
-# def get_some_data(request):
-#     token_data = request.payload
-#     response = JsonResponse({"token": token_data["user"]})
-#     return response
+@auth.jwt_login_required
+def get_some_data(request):
+    token_data = request.payload
+    response = JsonResponse({"token": token_data["user"]})
+    return response
 
 
-# @auth.jwt_login_required
-# def check_user(request):
-#     if request.user is not None:
-#         return JsonResponse({"authenticated": request.user.is_authenticated})
-#     else:
-#         return JsonResponse({"message": "not found"})
+@auth.jwt_login_required
+def check_user(request):
+    if request.user is not None:
+        return JsonResponse({"authenticated": request.user.is_authenticated})
+    else:
+        return JsonResponse({"message": "not found"})
 
 @require_http_methods( ["GET", "POST"])
 def api_list_accounts(request):
@@ -57,7 +57,7 @@ def api_list_accounts(request):
         )
     else:
         try:
-            if request.method == "PUT":
+            if request.method == "POST":
                 content = json.loads(request.body)
                 new_username = content["username"]
                 new_password = content["password"]
@@ -83,20 +83,20 @@ def api_list_accounts(request):
             response.status_code = 405
             return response
 
-# def update_censors(request, pk):
-#     if request.method == "PUT":
-#         account = Account.objects.get(id=pk)
-#         content = json.loads(request.body)
-#         new_censor = content["censored"]
+def update_censors(request, pk):
+    if request.method == "PUT":
+        account = Account.objects.get(id=pk)
+        content = json.loads(request.body)
+        new_censor = content["censored"]
 
-#         Account.objects.filter.get(id=pk)
-#         return JsonResponse(
-#             account,
-#             encoder=AccountDetailEncoder,
-#             safe=False
-#         )
-#     else:
-#         return JsonResponse({"message": "Your request has failed"})
+        Account.objects.filter.get(id=pk)
+        return JsonResponse(
+            account,
+            encoder=AccountDetailEncoder,
+            safe=False
+        )
+    else:
+        return JsonResponse({"message": "Your request has failed"})
 
 @require_http_methods(["DELETE", "PUT", "GET"])
 def api_show_account(request,pk):
