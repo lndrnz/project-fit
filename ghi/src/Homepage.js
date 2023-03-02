@@ -1,34 +1,39 @@
-import React, { Component } from "react"
-import Button from 'react-bootstrap/Button';
+import React, { useState } from "react"
 
 
-class HomePage extends Component {
-    render() {
-      const myStyle={
-        backgroundImage: 
-  "url('https://wallpaperaccess.com/full/3702281.jpg')",
-        marginTop:'-70px',
-        fontSize:'50px',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        width: '100vw',
-        height: '100vh'
-    };
+
+const products = [
+  { title: 'Cabbage', isFruit: false, id: 1 },
+  { title: 'Garlic', isFruit: false, id: 2 },
+  { title: 'Apple', isFruit: true, id: 3 },
+];
+
+const listItems = products.map((product) =>
+<li key={product.id}
+        style=
+        {{
+        color: product.isFruit ? 'blue':'red',
+        fontSize: '80px'}}>
+  {product.title}</li>)
+
+
+
+function HomePage(props) {
+    const [isHungry, setHungry] = useState(true)
     return (
-  
-      <div style={myStyle}>
-      <div className="row"> 
-        <h1 className="text-center" style={{color: 'white', textAlign: 'center'}}>Tren</h1>
-        <div className="col-lg-6 mx-auto">
-          <p className="lead fw-bold" style={{color: 'white', fontWeight: "bold", textAlign: 'center'}}>
-            The beginning of your journey to Ascend.
-          </p>
-  <button className="text-center"  style={{ backgroundColor: "lightgrey", color: "black", padding: "15px 32px", marginInline: "auto", display: "flex", fontSize: "30px", fontWeight: "bold", borderRadius: "12px" }}>Start here..</button>
-        </div>
-      </div>
-      </div>
+      
+      <>
+      <header style={{color: 'purple', fontSize: '80px', textAlign: 'center'}}>Cookbook</header>
+      <ul style = {{ fontSize: '80px'}}>Are you hungry for this?{listItems}</ul>
+      <button onClick={() => {setHungry(false)}} disabled={!isHungry} style={{color: isHungry === true ? 'red': 'green'}}>
+        {isHungry ? "I am hungry" : "I am not hungry"} 
+      </button>
+
+
+      </>
+
+      
+
     );
-  }
   }
   export default HomePage;
