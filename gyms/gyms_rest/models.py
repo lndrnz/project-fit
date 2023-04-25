@@ -18,9 +18,8 @@ class Exercise(models.Model):
         return self.name
 
 class Workout(models.Model):
-    title = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     description = models.TextField()
-    exercise = models.ManyToManyField(Exercise)
     duration = models.PositiveIntegerField()
     difficulty = models.IntegerField(choices=(
     (1, "Very Light Activity"),
@@ -31,7 +30,9 @@ class Workout(models.Model):
     (10, "Max Effort Activity")
     ))
     date_created = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(related_name="Workout", on_delete=models.CASCADE)
+    exercise = models.ManyToManyField(Exercise)
+    user = models.ForeignKey("UserVO", related_name="Workout", on_delete=models.CASCADE)
+    
     
     def __str__(self):
-        return self.title
+        return self.name
