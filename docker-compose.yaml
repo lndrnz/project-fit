@@ -48,7 +48,8 @@ services:
         environment:
             DATABASE_URL: postgresql://workouts:password@database:5432/workouts
             WAIT_HOSTS: database:5432
-            WORKOUT_APP_API_KEY: ${WORKOUT_APP_API_KEY}
+            #WORKOUT_APP_API_KEY: ${WORKOUT_APP_API_KEY}
+            DJWTO_SIGNING_KEY: ${DJWTO_SIGNING_KEY}
     gyms:
         build:
             context: ./gyms

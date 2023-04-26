@@ -21,6 +21,13 @@ We will be using the Google Maps API, the myfitnesspal API,and exersiseDB API wh
 Finished working on Accounts Microservice after a few month hiatus. I was able to complete the views.py and debug the problems while maintaining RESTful practices as well as making sure that JWT authentication was possible. I checked and verified on Insomnia, the only one I did not test however was the delete but maybe I will try it later when it's not so late. Just tried it right now DELETE works and I was able to fix a POST bug for creating new accounts as it was spelled PUT instead of POST.
 02/09/23 1:31 AM
 
+Started working on the Workouts Microservice. Completed the models.py and debugged the views.py.I was having a bug where the container wasn't working do to this error,
+"File "/usr/lib/python3.8/os.py", line 673, in __getitem__
+  raise KeyError(key) from None"
+It turns out the error was caused due to the workouts.urls.py having an unnecessary path('', include('djwto.urls')) in it as it would look for a signin key that did not even exist. For the time being I will continue working on debugging and getting the rest of the model to work and incorporate CRUD for exercises and workouts next.
+04/25/23 8:55 PM
+
+
 ## Goal
 The main goal of this project is for me to learn and challenge myself into making a Full-stack Web application using Django and React on my own this time.
 
