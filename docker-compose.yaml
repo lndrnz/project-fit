@@ -19,6 +19,8 @@ services:
             HOST: "0.0.0.0"
             NUTRITION_APP_API_KEY: ${NUTRITION_APP_API_KEY}
             WORKOUT_APP_API_KEY: ${WORKOUT_APP_API_KEY}
+            WORKOUT_APP_URL: https://exercisedb.p.rapidapi.com/exercises/name/%7Bname%7D
+            WORKOUT_APP_HOST: exercisedb.p.rapidapi.com
             REACT_APP_NUTRITION_HOST: http://localhost:8091
             REACT_APP_WORKOUTS_HOST: http://localhost:8080
             REACT_APP_ACCOUNTS_HOST: http://localhost:8090
@@ -49,7 +51,6 @@ services:
             DATABASE_URL: postgresql://workouts:password@database:5432/workouts
             WAIT_HOSTS: database:5432
             #WORKOUT_APP_API_KEY: ${WORKOUT_APP_API_KEY}
-            DJWTO_SIGNING_KEY: ${DJWTO_SIGNING_KEY}
     gyms:
         build:
             context: ./gyms

@@ -27,6 +27,9 @@ Started working on the Workouts Microservice. Completed the models.py and debugg
 It turns out the error was caused due to the workouts.urls.py having an unnecessary path('', include('djwto.urls')) in it as it would look for a signin key that did not even exist. For the time being I will continue working on debugging and getting the rest of the model to work and incorporate CRUD for exercises and workouts next.
 04/25/23 8:55 PM
 
+I fixed the issue with the Workouts Microservice, and I have come to the conclusion that I will no longer use a Workouts API in the backend. Instead I will either incorporate the workouts myself with CRUD commands or I pull it onto the front end aspect of the server where I will use an API. However, I will still need to have the workouts communicate with the accounts API.
+05/17/23 2:21 PM
+
 
 ## Goal
 The main goal of this project is for me to learn and challenge myself into making a Full-stack Web application using Django and React on my own this time.
