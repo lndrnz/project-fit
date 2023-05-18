@@ -30,7 +30,7 @@ class Workout(models.Model):
         (10, "Max Effort Activity")
     ))
     date_created = models.DateField(auto_now_add=True)
-    exercise = models.ManyToManyField(Exercise)
+    exercises = models.ManyToManyField(Exercise, on_delete=models.CASCADE)
     user = models.ForeignKey("UserVO",
                              related_name="Workout",
                              on_delete=models.CASCADE)
